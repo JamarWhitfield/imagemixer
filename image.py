@@ -1,53 +1,70 @@
-
-from PIL import Image
+from PIL import Image, ImageDraw
 import numpy as np
+import random
 
-# Open the image
-img = Image.open('/Users/jamarw/Documents/GitHub/imagemixer/shapes.png').convert('RGBA')
+def process_image(image_path):
+    img = Image.open(image_path).convert('RGBA')
+    img_array = np.array(img)
+    white_mask = np.all(img_array[:, :, :3] == [255, 255, 255], axis=-1)
+    alpha = np.where(white_mask, 0, 255)
+    img_array[:, :, 3] = alpha
+    return Image.fromarray(img_array, 'RGBA')
 
-# Create a numpy array from the image
-img_array = np.array(img)
+def add_shapes(img, num_shapes):
+    draw = ImageDraw.Draw(img)
+    width, height = img.size
+    for _ in range(num_shapes):
+        shape = random.choice(['rectangle', 'circle', 'ellipse', 'triangle', 'square'])
+        size = random.randint(1, 5)
+        x = random.randint(0, width - size)
+        y = random.randint(0, height - size)
+        if shape == 'rectangle':
+            draw.rectangle([x, y, x + size, y + size], fill=(0, 0, 0, 255))
+        elif shape == 'circle':
+            draw.ellipse([x, y, x + size, y + size], fill=(0, 0, 0, 255))
+        elif shape == 'ellipse':
+            draw.ellipse([x, y, x + size + 2, y + size], fill=(0, 0, 0, 255))
+        elif shape == 'triangle':
+            draw.polygon([(x, y), (x + size, y + size), (x - size, y + size)], fill=(0, 0, 0, 255))
+        elif shape == 'square':
+            draw.rectangle([x, y, x + size, y + size], fill=(0, 0, 0, 255))
+    return img
 
-# Create a mask for the white background
-white_mask = np.all(img_array[:, :, :3] == [255, 255, 255], axis=-1)
+for i in range(50):
+    # Process the first image
+    img1 = process_image('/Users/jamarw/Documents/GitHub/imagemixer/shapes.png')
 
-# Create a new alpha channel based on the white mask
-alpha = np.where(white_mask, 0, 255)
+    # Add more shapes to the first image
+    img1 = add_shapes(img1, random.randint(200, 300))
 
-# Apply the new alpha channel to the image
-img_array[:, :, 3] = alpha
+    # Process the second image
+    img2 = Image.open('/Users/jamarw/Documents/GitHub/imagemixer/shapes2.png').convert('RGBA')
 
-# Create a new image with the modified alpha channel
-new_img = Image.fromarray(img_array, 'RGBA')
+    # Add more shapes to the second image
+    img2 = add_shapes(img2, random.randint(200, 300))
 
-# Save the new image
-new_img.save('/Users/jamarw/Documents/GitHub/imagemixer/transparent_shapes.png')
+    # Resize the second image to match the size of the first image
+    resized_img2 = img2.resize(img1.size, Image.BILINEAR)
 
+    # Create a new array for the combined image
+    combined_img = np.zeros_like(np.array(img1))
 
-# Open the images
-img1 = np.array(Image.open('/Users/jamarw/Documents/GitHub/imagemixer/transparent_shapes.png').convert('RGBA'))
-img2 = np.array(Image.open('/Users/jamarw/Documents/GitHub/imagemixer/shapes2.png').resize(img1.shape[1::-1], Image.BILINEAR).convert('RGBA'))
+    # Calculate the alpha channel for each image
+    alpha1 = np.array(img1)[:, :, 3] / 255.0
+    alpha2 = np.array(resized_img2)[:, :, 3] / 255.0
 
-# Create a new array for the combined image
-combined_img = np.zeros_like(img1)
+    # Calculate the combined alpha channel
+    combined_alpha = alpha1 + alpha2 * (1 - alpha1)
 
-# Calculate the alpha channel for each image
-alpha1 = img1[:, :, 3] / 255.0
-alpha2 = img2[:, :, 3] / 255.0
+    # Combine the RGB channels
+    for j in range(3):
+        combined_img[:, :, j] = (np.array(img1)[:, :, j] * alpha1 + np.array(resized_img2)[:, :, j] * alpha2 * (1 - alpha1)) / combined_alpha
 
-# Calculate the combined alpha channel
-combined_alpha = alpha1 + alpha2 * (1 - alpha1)
+    # Combine the alpha channel
+    combined_img[:, :, 3] = combined_alpha * 255
 
-# Combine the RGB channels
-for i in range(3):
-    combined_img[:, :, i] = (img1[:, :, i] * alpha1 + img2[:, :, i] * alpha2 * (1 - alpha1)) / combined_alpha
+    # Create a PIL image from the combined array
+    output_img = Image.fromarray(combined_img.astype(np.uint8), 'RGBA')
 
-# Combine the alpha channel
-combined_img[:, :, 3] = combined_alpha * 255
-
-# Create a PIL image from the combined array
-output_img = Image.fromarray(combined_img.astype(np.uint8))
-
-# Save the output image
-output_img.save('/Users/jamarw/Documents/GitHub/imagemixer/output2.png')
-
+    # Save the output image with a unique filename
+    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/new/output_{i}.png')
