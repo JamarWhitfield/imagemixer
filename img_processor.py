@@ -57,17 +57,17 @@ def add_shapes(img, num_shapes, clustered=False):
 
 # Main loop to create (n) images
 for i in range(20):
-    # Create a blank image with a resolution of 4K (3840x2160 pixels)
-    img1 = Image.new('RGBA', (3840, 2160), (255, 255, 255, 255))
+    # Create a blank image with a resolution of 1080p 
+    img1 = Image.new('RGBA', (1920, 1080), (255, 255, 255, 255))
 
     # Add more shapes to the first image, some clustered and some not
-    img1 = add_shapes(img1, random.randint(10000, 20000), clustered=random.choice([True, False]))
+    img1 = add_shapes(img1, random.randint(200, 250), clustered=random.choice([True, False]))
 
-    # Create a blank image with a resolution of 4K (3840x2160 pixels)
-    img2 = Image.new('RGBA', (3840, 2160), (255, 255, 255, 255))
+    # Create a blank image with a resolution of 1080p
+    img2 = Image.new('RGBA', (1920, 1080), (255, 255, 255, 255))
 
     # Add more shapes to the second image, some clustered and some not
-    img2 = add_shapes(img2, random.randint(10000, 20000), clustered=random.choice([True, False]))
+    img2 = add_shapes(img2, random.randint(200, 250), clustered=random.choice([True, False]))
 
     # Resize the second image to match the size of the first image
     resized_img2 = img2.resize(img1.size, Image.BILINEAR)
@@ -93,4 +93,4 @@ for i in range(20):
     output_img = Image.fromarray(combined_img.astype(np.uint8), 'RGBA')
 
     # Save the output image with a unique filename
-    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/n3/output_{i}.png')
+    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/n4/output_{i}.png')
