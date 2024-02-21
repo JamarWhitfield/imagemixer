@@ -4,6 +4,7 @@ from sklearn.cluster import KMeans
 import os
 
 # Path to the folder containing shape images
+# trouble shoot so i will cluster shapes on image
 folder_path = '/Users/jamarw/Documents/GitHub/imagemixer/n3'
 
 # Function to load images from folder
