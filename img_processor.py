@@ -57,6 +57,10 @@ def add_shapes(img, num_shapes, clustered=False):
     return img
 '''
 
+'''
+Loop for creating random image on a blank background
+each image is a random color and no shape has a similar color
+'''
 def add_shapes(img, num_shapes, clustered=False):
     """
     Adds shapes to an image.
