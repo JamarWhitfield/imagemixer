@@ -1,3 +1,4 @@
+'''
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 import random
@@ -22,7 +23,7 @@ def process_image(image_path):
     img_array[:, :, 3] = alpha
     return Image.fromarray(img_array, 'RGBA')
 
-'''
+
 # Function to add shapes to an image
 def add_shapes(img, num_shapes, clustered=False):
     """
@@ -58,8 +59,8 @@ def add_shapes(img, num_shapes, clustered=False):
 '''
 
 '''
-Loop for creating random image on a blank background
-each image is a random color and no shape has a similar color
+# Loop for creating random image on a blank background
+# each image is a random color and no shape has a similar color
 '''
 def add_shapes(img, num_shapes, clustered=False):
     """
@@ -99,6 +100,7 @@ def add_shapes(img, num_shapes, clustered=False):
         elif shape == 'square':
             draw.rectangle([x, y, x + size, y + size], fill=color + (255,))
     return img
+'''
 
 # Main loop to create (n) images
 for i in range(20):
@@ -139,4 +141,53 @@ for i in range(20):
     output_img = Image.fromarray(combined_img.astype(np.uint8), 'RGBA')
 
     # Save the output image with a unique filename
-    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/hiya/output_{i}.png')
+    output_img.save(f'/Users/jwhitf/Documents/GitHub/imagemixer/hiya/output_{i}.png')
+'''
+
+from PIL import Image, ImageDraw
+import numpy as np
+import random
+
+# Function to add shapes to an image
+def add_shapes(img, num_shapes):
+    """
+    Adds shapes to an image.
+
+    Args:
+    img (Image): The image to which shapes will be added.
+    num_shapes (int): The number of shapes to add.
+
+    Returns:
+    Image: The image with added shapes.
+    """
+    draw = ImageDraw.Draw(img)
+    width, height = img.size
+    for _ in range(num_shapes):
+        # Generate random grayscale color
+        color = random.randint(0, 255)
+        
+        # Choose a random shape from triangle, circle, and square
+        shape = random.choice(['triangle', 'circle', 'square'])
+        
+        size = random.randint(20, 30)
+        x = random.randint(0, width - size)
+        y = random.randint(0, height - size)
+        
+        if shape == 'triangle':
+            draw.polygon([(x, y), (x + size, y + size), (x - size, y + size)], fill=(color, color, color, 255))
+        elif shape == 'circle':
+            draw.ellipse([x, y, x + size, y + size], fill=(color, color, color, 255))
+        elif shape == 'square':
+            draw.rectangle([x, y, x + size, y + size], fill=(color, color, color, 255))
+    return img
+
+# Main loop to create (n) images
+for i in range(20):
+    # Create a blank image with a resolution of 1080p 
+    img = Image.new('RGBA', (1920, 1080), (255, 255, 255, 255))
+
+    # Add more shapes to the image
+    img = add_shapes(img, random.randint(50, 100))
+
+    # Save the output image with a unique filename
+    img.save(f'/Users/jwhitf/Documents/GitHub/imagemixer/hiya/output_{i}.png')
