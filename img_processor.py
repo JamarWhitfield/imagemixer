@@ -139,4 +139,4 @@ for i in range(20):
     output_img = Image.fromarray(combined_img.astype(np.uint8), 'RGBA')
 
     # Save the output image with a unique filename
-    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/black/output_{i}.png')
+    output_img.save(f'/Users/jamarw/Documents/GitHub/imagemixer/hiya/output_{i}.png')
