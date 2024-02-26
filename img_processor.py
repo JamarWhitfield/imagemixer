@@ -44,5 +44,5 @@ for i in range(20):
     img = add_shapes(img, random.randint(50, 100))
 
     # Save the output image with a unique filename
-    img.save(f'/Users/jwhitf/Documents/GitHub/imagemixer/hiya/output_{i}.png')
+    img.save(f'/Users/jwhitf/Documents/GitHub/imagemixer/lm/output_{i}.png')
     
