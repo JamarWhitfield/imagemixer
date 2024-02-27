@@ -16,6 +16,7 @@ def add_shapes(img, num_shapes):
     """
     draw = ImageDraw.Draw(img)
     width, height = img.size
+    # Simple loop construct that creates a color and random number of shapes
     for _ in range(num_shapes):
         # Generate random grayscale color
         color = random.randint(0, 255)
