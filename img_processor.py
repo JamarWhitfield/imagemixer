@@ -110,9 +110,9 @@ def add_colored_version(grayscale_img):
 
 # Main loop to create (n) images
 grayscale_output_folder = "/Users/jwhitf/Documents/GitHub/imagemixer/grayscale"  # Specify the grayscale folder path
-colored_output_folder = "/Users/jwhitf/Documents/GitHub/imagemixer/color"  # Specify the colored folder path
+#colored_output_folder = "/Users/jwhitf/Documents/GitHub/imagemixer/color"  # Specify the colored folder path
 os.makedirs(grayscale_output_folder, exist_ok=True)  # Ensure the grayscale output folder exists
-os.makedirs(colored_output_folder, exist_ok=True)  # Ensure the colored output folder exists
+#os.makedirs(colored_output_folder, exist_ok=True)  # Ensure the colored output folder exists
 
 for i in range(20):  # Generate 20 images
     # Create a blank grayscale image with a resolution of 1920x1080 pixels
